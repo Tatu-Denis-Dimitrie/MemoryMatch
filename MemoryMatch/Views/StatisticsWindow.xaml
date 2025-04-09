@@ -1,0 +1,36 @@
+<Window x:Class="MemoryMatch.Views.StatisticsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Statistici Jucători" Height="450" Width="600"
+        WindowStartupLocation="CenterScreen">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Statistici Jucători" 
+                   FontSize="24" 
+                   FontWeight="Bold" 
+                   HorizontalAlignment="Center" 
+                   Margin="0,0,0,20"/>
+
+        <DataGrid Grid.Row="1" 
+                  AutoGenerateColumns="False" 
+                  IsReadOnly="True"
+                  CanUserSortColumns="False"
+                  ItemsSource="{Binding Statistics}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Nume Utilizator" 
+                                  Binding="{Binding Username}" 
+                                  Width="*"/>
+                <DataGridTextColumn Header="Jocuri Jucate" 
+                                  Binding="{Binding GamesPlayed}" 
+                                  Width="*"/>
+                <DataGridTextColumn Header="Jocuri Câștigate" 
+                                  Binding="{Binding GamesWon}" 
+                                  Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window> 

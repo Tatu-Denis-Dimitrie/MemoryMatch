@@ -64,7 +64,17 @@ namespace MemoryMatch.Models
 
         public void AddUser(User user)
         {
-            if (!Users.Any(u => u.Username == user.Username))
+            bool usernameExists = false;
+            foreach (var existingUser in Users)
+            {
+                if (existingUser.Username == user.Username)
+                {
+                    usernameExists = true;
+                    break;
+                }
+            }
+            
+            if (!usernameExists)
             {
                 Users.Add(user);
                 SaveUsers();

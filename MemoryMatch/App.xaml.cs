@@ -1,5 +1,4 @@
-﻿using System.Configuration;
-using System.Data;
+﻿using System;
 using System.Windows;
 using MemoryMatch.Views;
 
@@ -18,5 +17,4 @@ namespace MemoryMatch
             mainWindow.Show();
         }
     }
-
 }

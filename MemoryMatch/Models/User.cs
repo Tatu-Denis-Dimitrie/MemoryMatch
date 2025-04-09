@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Text.Json.Serialization;
 
 namespace MemoryMatch.Models
 {
@@ -9,6 +10,8 @@ namespace MemoryMatch.Models
     {
         private string _username;
         private string _imagePath;
+        
+        [JsonInclude]
         public List<GameStatistic> Statistics { get; set; } = new List<GameStatistic>();
 
         public string Username
@@ -57,11 +60,22 @@ namespace MemoryMatch.Models
 
     public class GameStatistic
     {
+        [JsonInclude]
         public DateTime Date { get; set; }
+        
+        [JsonInclude]
         public bool IsWon { get; set; }
+        
+        [JsonInclude]
         public string Category { get; set; }
+        
+        [JsonInclude]
         public int Rows { get; set; }
+        
+        [JsonInclude]
         public int Columns { get; set; }
+        
+        [JsonInclude]
         public TimeSpan TimeToComplete { get; set; }
 
         public GameStatistic()

@@ -7,6 +7,7 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
 using MemoryMatch.Models;
+using MemoryMatch.Helpers;
 
 namespace MemoryMatch.ViewModels
 {
@@ -17,12 +18,24 @@ namespace MemoryMatch.ViewModels
         private string _newUsername;
         private string _selectedImagePath;
         private BitmapImage _previewImage;
+        private readonly RelayCommand _createUserCommand;
+        private readonly RelayCommand _deleteUserCommand;
+        private readonly RelayCommand _playCommand;
 
-        public ObservableCollection<User> Users => _userManager.Users;
+        public ObservableCollection<User> Users 
+        { 
+            get 
+            { 
+                return _userManager.Users; 
+            }
+        }
 
         public User SelectedUser
         {
-            get => _selectedUser;
+            get 
+            { 
+                return _selectedUser; 
+            }
             set
             {
                 if (_selectedUser != value)
@@ -32,15 +45,18 @@ namespace MemoryMatch.ViewModels
                     OnPropertyChanged(nameof(IsUserSelected));
                     OnPropertyChanged(nameof(CanDeleteUser));
                     OnPropertyChanged(nameof(CanPlay));
-                    DeleteUserCommand.RaiseCanExecuteChanged();
-                    PlayCommand.RaiseCanExecuteChanged();
+                    _deleteUserCommand.RaiseCanExecuteChanged();
+                    _playCommand.RaiseCanExecuteChanged();
                 }
             }
         }
 
         public string NewUsername
         {
-            get => _newUsername;
+            get 
+            { 
+                return _newUsername; 
+            }
             set
             {
                 if (_newUsername != value)
@@ -48,14 +64,17 @@ namespace MemoryMatch.ViewModels
                     _newUsername = value;
                     OnPropertyChanged();
                     OnPropertyChanged(nameof(CanCreateUser));
-                    CreateUserCommand.RaiseCanExecuteChanged();
+                    _createUserCommand.RaiseCanExecuteChanged();
                 }
             }
         }
 
         public string SelectedImagePath
         {
-            get => _selectedImagePath;
+            get 
+            { 
+                return _selectedImagePath; 
+            }
             set
             {
                 if (_selectedImagePath != value)
@@ -63,7 +82,7 @@ namespace MemoryMatch.ViewModels
                     _selectedImagePath = value;
                     OnPropertyChanged();
                     OnPropertyChanged(nameof(CanCreateUser));
-                    CreateUserCommand.RaiseCanExecuteChanged();
+                    _createUserCommand.RaiseCanExecuteChanged();
                     
                     if (!string.IsNullOrEmpty(value))
                     {
@@ -79,7 +98,10 @@ namespace MemoryMatch.ViewModels
 
         public BitmapImage PreviewImage
         {
-            get => _previewImage;
+            get 
+            { 
+                return _previewImage; 
+            }
             set
             {
                 if (_previewImage != value)
@@ -90,24 +112,74 @@ namespace MemoryMatch.ViewModels
             }
         }
 
-        public bool IsUserSelected => SelectedUser != null;
-        public bool CanDeleteUser => SelectedUser != null;
-        public bool CanPlay => SelectedUser != null;
-        public bool CanCreateUser => !string.IsNullOrWhiteSpace(NewUsername) && !string.IsNullOrWhiteSpace(SelectedImagePath);
+        public bool IsUserSelected
+        {
+            get
+            {
+                return SelectedUser != null;
+            }
+        }
 
-        public RelayCommand SelectImageCommand { get; }
-        public RelayCommand CreateUserCommand { get; }
-        public RelayCommand DeleteUserCommand { get; }
-        public RelayCommand PlayCommand { get; }
+        public bool CanDeleteUser
+        {
+            get
+            {
+                return SelectedUser != null;
+            }
+        }
+
+        public bool CanPlay
+        {
+            get
+            {
+                return SelectedUser != null;
+            }
+        }
+
+        public bool CanCreateUser
+        {
+            get
+            {
+                bool hasUsername = NewUsername != null && NewUsername.Trim().Length > 0;
+                bool hasImage = SelectedImagePath != null && SelectedImagePath.Trim().Length > 0;
+                return hasUsername && hasImage;
+            }
+        }
+
+        public ICommand SelectImageCommand { get; }
+        
+        public ICommand CreateUserCommand 
+        { 
+            get 
+            { 
+                return _createUserCommand; 
+            }
+        }
+        
+        public ICommand DeleteUserCommand 
+        { 
+            get 
+            { 
+                return _deleteUserCommand; 
+            }
+        }
+        
+        public ICommand PlayCommand 
+        { 
+            get 
+            { 
+                return _playCommand; 
+            }
+        }
 
         public SignInViewModel()
         {
             _userManager = new UserManager();
             
             SelectImageCommand = new RelayCommand(ExecuteSelectImage);
-            CreateUserCommand = new RelayCommand(ExecuteCreateUser, CanExecuteCreateUser);
-            DeleteUserCommand = new RelayCommand(ExecuteDeleteUser, CanExecuteDeleteUser);
-            PlayCommand = new RelayCommand(ExecutePlay, CanExecutePlay);
+            _createUserCommand = new RelayCommand(ExecuteCreateUser, CanExecuteCreateUser);
+            _deleteUserCommand = new RelayCommand(ExecuteDeleteUser, CanExecuteDeleteUser);
+            _playCommand = new RelayCommand(ExecutePlay, CanExecutePlay);
         }
 
         private void ExecuteSelectImage(object parameter)
@@ -157,8 +229,17 @@ namespace MemoryMatch.ViewModels
 
         private void ExecutePlay(object parameter)
         {
-            // TODO: Implementare pentru începerea jocului
-            MessageBox.Show($"Jocul începe pentru utilizatorul {SelectedUser.Username}!");
+            var gameView = new Views.GameView(SelectedUser.Username);
+            gameView.Show();
+            
+            foreach (Window window in Application.Current.Windows)
+            {
+                if (window is Views.SignInView)
+                {
+                    window.Close();
+                    break;
+                }
+            }
         }
 
         private bool CanExecutePlay(object parameter)
@@ -170,36 +251,10 @@ namespace MemoryMatch.ViewModels
 
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-    }
-
-    public class RelayCommand : ICommand
-    {
-        private readonly Action<object> _execute;
-        private readonly Predicate<object> _canExecute;
-
-        public RelayCommand(Action<object> execute, Predicate<object> canExecute = null)
-        {
-            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
-            _canExecute = canExecute;
-        }
-
-        public bool CanExecute(object parameter)
-        {
-            return _canExecute == null || _canExecute(parameter);
-        }
-
-        public void Execute(object parameter)
-        {
-            _execute(parameter);
-        }
-
-        public event EventHandler CanExecuteChanged;
-
-        public void RaiseCanExecuteChanged()
-        {
-            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
     }
 } 
