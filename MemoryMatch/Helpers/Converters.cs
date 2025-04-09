@@ -17,8 +17,15 @@ namespace MemoryMatch.Helpers
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is bool && (bool)value)
-                return parameter;
+            bool isBool = value is bool;
+            if (isBool)
+            {
+                bool boolValue = (bool)value;
+                if (boolValue)
+                {
+                    return parameter;
+                }
+            }
 
             return Binding.DoNothing;
         }
@@ -38,7 +45,12 @@ namespace MemoryMatch.Helpers
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is bool && (bool)value && parameter != null && targetType.IsEnum)
+            bool isBool = value is bool;
+            bool isTrue = isBool && (bool)value;
+            bool hasParameter = parameter != null;
+            bool isEnum = targetType.IsEnum;
+            
+            if (isTrue && hasParameter && isEnum)
             {
                 return Enum.Parse(targetType, parameter.ToString());
             }
@@ -51,15 +63,23 @@ namespace MemoryMatch.Helpers
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is bool)
-                return !(bool)value;
+            bool isBool = value is bool;
+            if (isBool)
+            {
+                bool boolValue = (bool)value;
+                return !boolValue;
+            }
             return value;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is bool)
-                return !(bool)value;
+            bool isBool = value is bool;
+            if (isBool)
+            {
+                bool boolValue = (bool)value;
+                return !boolValue;
+            }
             return value;
         }
     }
@@ -68,9 +88,18 @@ namespace MemoryMatch.Helpers
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is bool isWon)
+            bool isBool = value is bool;
+            if (isBool)
             {
-                return isWon ? "Won" : "Lost";
+                bool isWon = (bool)value;
+                if (isWon)
+                {
+                    return "Won";
+                }
+                else
+                {
+                    return "Lost";
+                }
             }
             return "Unknown";
         }

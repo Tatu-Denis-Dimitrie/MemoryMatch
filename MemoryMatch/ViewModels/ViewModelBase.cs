@@ -4,8 +4,10 @@ using System.Runtime.CompilerServices;
 
 namespace MemoryMatch.ViewModels
 {
+   
     public class ViewModelBase : INotifyPropertyChanged
     {
+       
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
