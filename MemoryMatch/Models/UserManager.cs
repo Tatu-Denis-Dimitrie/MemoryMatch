@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text.Json;
 using System.Collections.ObjectModel;
+using System.Text.Json;
 
 namespace MemoryMatch.Models
 {
+    /// <summary>
+    /// Manager pentru gestionarea utilizatorilor aplicației
+    /// </summary>
     public class UserManager
     {
         private static string UsersFilePath => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "users.json");

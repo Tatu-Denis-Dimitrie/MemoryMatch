@@ -3,8 +3,11 @@ using System;
 using System.Globalization;
 using System.Windows.Data;
 
-namespace MemoryMatch.Helpers
+namespace MemoryMatch.Converters
 {
+    /// <summary>
+    /// Compară două string-uri și returnează un boolean
+    /// </summary>
     public class StringEqualityToBooleanConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -31,6 +34,9 @@ namespace MemoryMatch.Helpers
         }
     }
 
+    /// <summary>
+    /// Convertește o valoare enum într-un boolean
+    /// </summary>
     public class EnumToBooleanConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -59,6 +65,9 @@ namespace MemoryMatch.Helpers
         }
     }
 
+    /// <summary>
+    /// Inversează o valoare boolean
+    /// </summary>
     public class InverseBooleanConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -84,6 +93,9 @@ namespace MemoryMatch.Helpers
         }
     }
 
+    /// <summary>
+    /// Convertește un boolean într-un text de rezultat
+    /// </summary>
     public class GameResultConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -107,6 +119,30 @@ namespace MemoryMatch.Helpers
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return Binding.DoNothing;
+        }
+    }
+
+    /// <summary>
+    /// Convertește valoare boolean la vizibilitate
+    /// </summary>
+    public class BooleanInvertConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is bool boolValue)
+            {
+                return !boolValue;
+            }
+            return value;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is bool boolValue)
+            {
+                return !boolValue;
+            }
+            return value;
         }
     }
 } 
