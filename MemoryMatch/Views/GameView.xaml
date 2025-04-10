@@ -73,9 +73,9 @@
         <Menu DockPanel.Dock="Top" Style="{StaticResource MenuStyle}">
             <MenuItem Header="File" Style="{StaticResource MenuItemStyle}">
                 <MenuItem Header="Category" Style="{StaticResource SubmenuItemStyle}">
-                    <MenuItem Header="Categoria 1" Command="{Binding SelectCategoryCommand}" CommandParameter="Categoria1" Style="{StaticResource SubmenuItemStyle}"/>
-                    <MenuItem Header="Categoria 2" Command="{Binding SelectCategoryCommand}" CommandParameter="Categoria2" Style="{StaticResource SubmenuItemStyle}"/>
-                    <MenuItem Header="Categoria 3" Command="{Binding SelectCategoryCommand}" CommandParameter="Categoria3" Style="{StaticResource SubmenuItemStyle}"/>
+                    <MenuItem Header="Animale" Command="{Binding SelectCategoryCommand}" CommandParameter="Animale" Style="{StaticResource SubmenuItemStyle}"/>
+                    <MenuItem Header="Peisaje" Command="{Binding SelectCategoryCommand}" CommandParameter="Peisaje" Style="{StaticResource SubmenuItemStyle}"/>
+                    <MenuItem Header="Mancaruri" Command="{Binding SelectCategoryCommand}" CommandParameter="Mancaruri" Style="{StaticResource SubmenuItemStyle}"/>
                 </MenuItem>
                 <Separator/>
                 <MenuItem Header="New Game" Command="{Binding NewGameCommand}" Style="{StaticResource SubmenuItemStyle}"/>

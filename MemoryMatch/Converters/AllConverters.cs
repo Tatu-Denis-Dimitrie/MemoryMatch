@@ -5,9 +5,6 @@ using System.Windows.Data;
 
 namespace MemoryMatch.Converters
 {
-    /// <summary>
-    /// Compară două string-uri și returnează un boolean
-    /// </summary>
     public class StringEqualityToBooleanConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -33,10 +30,6 @@ namespace MemoryMatch.Converters
             return Binding.DoNothing;
         }
     }
-
-    /// <summary>
-    /// Convertește o valoare enum într-un boolean
-    /// </summary>
     public class EnumToBooleanConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -64,10 +57,6 @@ namespace MemoryMatch.Converters
             return Binding.DoNothing;
         }
     }
-
-    /// <summary>
-    /// Inversează o valoare boolean
-    /// </summary>
     public class InverseBooleanConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -93,9 +82,6 @@ namespace MemoryMatch.Converters
         }
     }
 
-    /// <summary>
-    /// Convertește un boolean într-un text de rezultat
-    /// </summary>
     public class GameResultConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -122,9 +108,6 @@ namespace MemoryMatch.Converters
         }
     }
 
-    /// <summary>
-    /// Convertește valoare boolean la vizibilitate
-    /// </summary>
     public class BooleanInvertConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

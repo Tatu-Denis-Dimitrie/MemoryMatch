@@ -1,4 +1,4 @@
-using System;
+using System.IO;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -184,10 +184,13 @@ namespace MemoryMatch.ViewModels
 
         private void ExecuteSelectImage(object parameter)
         {
+            string imageDirectory = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"..\..\..\Images\ProfilePictures"));
+
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
                 Title = "Selectează o imagine",
-                Filter = "Fișiere imagine|*.jpg;*.jpeg;*.png;*.gif|Toate fișierele|*.*"
+                Filter = "Fișiere imagine|*.jpg;*.jpeg;*.png;*.gif|Toate fișierele|*.*",
+                InitialDirectory = imageDirectory
             };
 
             if (openFileDialog.ShowDialog() == true)
@@ -195,6 +198,7 @@ namespace MemoryMatch.ViewModels
                 SelectedImagePath = openFileDialog.FileName;
             }
         }
+
 
         private void ExecuteCreateUser(object parameter)
         {

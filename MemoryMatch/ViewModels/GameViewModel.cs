@@ -153,7 +153,7 @@ namespace MemoryMatch.ViewModels
             GameBoard = new ObservableCollection<CardViewModel>();
             DimensionOptions = new ObservableCollection<int> { 2, 3, 4, 5, 6 };
             TimeOptions = new ObservableCollection<int> { 30, 60, 90, 120, 180, 300 };
-            Categories = new ObservableCollection<string> { "Categoria1", "Categoria2", "Categoria3" };
+            Categories = new ObservableCollection<string> { "Animale", "Peisaje", "Mancaruri" };
 
             SelectCategoryCommand = new RelayCommand(ExecuteSelectCategory);
             NewGameCommand = new RelayCommand(ExecuteNewGame);

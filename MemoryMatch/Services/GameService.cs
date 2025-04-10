@@ -151,7 +151,6 @@ namespace MemoryMatch.Services
             {
                 List<string> imageFiles = new List<string>();
                 
-                // Adaug fișierele .jpg
                 string[] jpgFiles = Directory.GetFiles(basePath, "*.jpg");
                 foreach (string file in jpgFiles)
                 {
