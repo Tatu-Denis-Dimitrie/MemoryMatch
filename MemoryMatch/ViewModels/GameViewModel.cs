@@ -146,6 +146,10 @@ namespace MemoryMatch.ViewModels
         public ICommand ShowAboutCommand { get; }
         public ICommand CardClickCommand { get; }
 
+        public bool CanDeleteUser => !string.IsNullOrEmpty(CurrentUsername);
+        
+        public bool CanPlay => !string.IsNullOrEmpty(CurrentUsername);
+
         public GameViewModel()
         {
             _gameService = new GameService();
@@ -208,7 +212,7 @@ namespace MemoryMatch.ViewModels
             
             int timeUsed = SelectedGameTime - RemainingTimeInSeconds;
             
-            MessageBox.Show($"Felicitări! Ai câștigat jocul în {timeUsed} secunde!", "Victorie", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show($"Felicitari! Ai castigat jocul in {timeUsed} secunde!", "Victorie", MessageBoxButton.OK, MessageBoxImage.Information);
             
             _gameService.SaveStatistic(CurrentUsername, new GameStatistic
             {
@@ -240,7 +244,7 @@ namespace MemoryMatch.ViewModels
             if (parameter is string category)
             {
                 SelectedCategory = category;
-                MessageBox.Show($"Categoria selectată: {SelectedCategory}");
+                MessageBox.Show($"Categoria selectata: {SelectedCategory}");
             }
         }
 
@@ -259,7 +263,7 @@ namespace MemoryMatch.ViewModels
 
             mainStackPanel.Children.Add(new System.Windows.Controls.TextBlock 
             { 
-                Text = "Selectați categoria:", 
+                Text = "Selectati categoria:", 
                 Margin = new Thickness(0, 0, 0, 5) 
             });
 
@@ -274,7 +278,7 @@ namespace MemoryMatch.ViewModels
 
             mainStackPanel.Children.Add(new System.Windows.Controls.TextBlock 
             { 
-                Text = "Introduceți timpul limită (secunde):", 
+                Text = "Introduceti timpul limita (secunde):", 
                 Margin = new Thickness(0, 0, 0, 5) 
             });
 
@@ -294,14 +298,14 @@ namespace MemoryMatch.ViewModels
             
             var okButton = new System.Windows.Controls.Button 
             { 
-                Content = "Începe jocul", 
+                Content = "Incepe jocul", 
                 Width = 100, 
                 Margin = new Thickness(0, 0, 5, 0) 
             };
             
             var cancelButton = new System.Windows.Controls.Button 
             { 
-                Content = "Anulează", 
+                Content = "Anuleaza", 
                 Width = 75 
             };
 
@@ -317,13 +321,13 @@ namespace MemoryMatch.ViewModels
             {
                 if (categoryComboBox.SelectedItem == null)
                 {
-                    MessageBox.Show("Vă rugăm să selectați o categorie.", "Eroare", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Va rugam sa selectati o categorie.", "Eroare", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
 
                 if (!int.TryParse(timeTextBox.Text, out int seconds) || seconds <= 0)
                 {
-                    MessageBox.Show("Vă rugăm să introduceți un număr pozitiv de secunde.", "Eroare", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Va rugam sa introduceti un numar pozitiv de secunde.", "Eroare", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
 
@@ -336,7 +340,7 @@ namespace MemoryMatch.ViewModels
                 }
                 else
                 {
-                    MessageBox.Show("Categorie invalidă.", "Eroare", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Categorie invalida.", "Eroare", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             };
 
@@ -373,7 +377,7 @@ namespace MemoryMatch.ViewModels
         {
             if (string.IsNullOrEmpty(CurrentUsername))
             {
-                MessageBox.Show("Nu există niciun utilizator selectat.", "Eroare", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Nu exista niciun utilizator selectat.", "Eroare", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
             
@@ -381,7 +385,7 @@ namespace MemoryMatch.ViewModels
             
             if (savedGame == null)
             {
-                MessageBox.Show("Nu există niciun joc salvat pentru utilizatorul curent.", "Eroare", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Nu exista niciun joc salvat pentru utilizatorul curent.", "Eroare", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
             
@@ -404,14 +408,14 @@ namespace MemoryMatch.ViewModels
             _gameTimer.Stop();
             _gameTimer.Start();
             
-            MessageBox.Show($"Joc încărcat. Timp rămas: {TimeDisplay}", "Joc încărcat", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show($"Joc incarcat. Timp ramas: {TimeDisplay}", "Joc incarcat", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void ExecuteSaveGame(object parameter)
         {
             if (GameBoardVisibility == Visibility.Collapsed)
             {
-                MessageBox.Show("Nu există niciun joc activ pentru a fi salvat.", "Eroare", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Nu exista niciun joc activ pentru a fi salvat.", "Eroare", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
             
@@ -444,7 +448,7 @@ namespace MemoryMatch.ViewModels
             
             _gameService.SaveGame(gameToSave);
             
-            MessageBox.Show($"Jocul curent a fost salvat. Timp rămas: {TimeDisplay}");
+            MessageBox.Show($"Jocul curent a fost salvat. Timp ramas: {TimeDisplay}");
             
             _gameTimer.Start();
         }
@@ -459,7 +463,7 @@ namespace MemoryMatch.ViewModels
         {
             _gameTimer.Stop();
             
-            MessageBoxResult result = MessageBox.Show("Sigur doriți să vă întoarceți la ecranul de autentificare? Jocul curent va fi pierdut dacă nu l-ați salvat.", "Confirmare", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            MessageBoxResult result = MessageBox.Show("Sigur doriti sa va intoarceti la ecranul de autentificare? Jocul curent va fi pierdut daca nu l-ati salvat.", "Confirmare", MessageBoxButton.YesNo, MessageBoxImage.Question);
             
             if (result == MessageBoxResult.Yes)
             {
@@ -485,20 +489,20 @@ namespace MemoryMatch.ViewModels
         {
             BoardRows = 4;
             BoardColumns = 4;
-            MessageBox.Show("Dimensiune tablă: 4x4 (standard)");
+            MessageBox.Show("Dimensiune tabla: 4x4 (standard)");
         }
 
         private void ExecuteSetCustomBoard(object parameter)
         {
             if ((SelectedRows * SelectedColumns) % 2 != 0)
             {
-                MessageBox.Show("Dimensiunile selectate rezultă într-un număr impar de cărți. Numărul de cărți trebuie să fie par.", "Eroare", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Dimensiunile selectate rezulta intr-un numar impar de carti. Numarul de carti trebuie sa fie par.", "Eroare", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
             
             BoardRows = SelectedRows;
             BoardColumns = SelectedColumns;
-            MessageBox.Show($"Dimensiune tablă: {BoardRows}x{BoardColumns} (personalizat)");
+            MessageBox.Show($"Dimensiune tabla: {BoardRows}x{BoardColumns} (personalizat)");
         }
 
         private void ExecuteShowAbout(object parameter)
@@ -509,7 +513,7 @@ namespace MemoryMatch.ViewModels
                 "Email: denis.tatu@student.unitbv.ro\n" +
                 "Grupa: 10LF234\n" +
                 "Specializare: Informatica",
-                "Despre aplicație",
+                "Despre aplicatie",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
         }
@@ -586,7 +590,7 @@ namespace MemoryMatch.ViewModels
                         }
                         catch (Exception ex)
                         {
-                            Debug.WriteLine($"Eroare la resetarea cărților: {ex.Message}");
+                            Debug.WriteLine($"Eroare la resetarea cartilor: {ex.Message}");
                         }
                         finally
                         {
@@ -599,7 +603,7 @@ namespace MemoryMatch.ViewModels
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"A apărut o eroare: {ex.Message}", "Eroare", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"A aparut o eroare: {ex.Message}", "Eroare", MessageBoxButton.OK, MessageBoxImage.Error);
                 ResetSelectedCards();
             }
         }
@@ -623,7 +627,7 @@ namespace MemoryMatch.ViewModels
             
             if (totalCards % 2 != 0)
             {
-                MessageBox.Show("Eroare: Numărul total de cărți trebuie să fie par.", "Eroare", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Eroare: Numarul total de carti trebuie sa fie par.", "Eroare", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
             

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Linq;
+using System.Diagnostics;
 
 namespace MemoryMatch.Services
 {
@@ -35,8 +36,9 @@ namespace MemoryMatch.Services
 
                 return JsonSerializer.Deserialize<List<User>>(json, options) ?? new List<User>();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Debug.WriteLine($"Eroare la incarcarea utilizatorilor: {ex.Message}");
                 return new List<User>();
             }
         }
@@ -56,8 +58,10 @@ namespace MemoryMatch.Services
                 
                 File.WriteAllText(_usersFilePath, json);
             }
-            catch (Exception)
-            {}
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Eroare la salvarea utilizatorilor: {ex.Message}");
+            }
         }
 
         public void AddUser(User user)

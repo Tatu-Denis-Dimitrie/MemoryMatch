@@ -8,12 +8,13 @@ using System.Windows.Media.Imaging;
 using Microsoft.Win32;
 using MemoryMatch.Models;
 using MemoryMatch.Helpers;
+using MemoryMatch.Services;
 
 namespace MemoryMatch.ViewModels
 {
     public class SignInViewModel : INotifyPropertyChanged
     {
-        private readonly UserManager _userManager;
+        private readonly UserService _userService;
         private User _selectedUser;
         private string _newUsername;
         private string _selectedImagePath;
@@ -21,12 +22,15 @@ namespace MemoryMatch.ViewModels
         private readonly RelayCommand _createUserCommand;
         private readonly RelayCommand _deleteUserCommand;
         private readonly RelayCommand _playCommand;
+        private ObservableCollection<User> _users;
 
         public ObservableCollection<User> Users 
         { 
-            get 
-            { 
-                return _userManager.Users; 
+            get => _users;
+            private set
+            {
+                _users = value;
+                OnPropertyChanged();
             }
         }
 
@@ -112,29 +116,11 @@ namespace MemoryMatch.ViewModels
             }
         }
 
-        public bool IsUserSelected
-        {
-            get
-            {
-                return SelectedUser != null;
-            }
-        }
+        public bool IsUserSelected => SelectedUser != null;
 
-        public bool CanDeleteUser
-        {
-            get
-            {
-                return SelectedUser != null;
-            }
-        }
+        public bool CanDeleteUser => IsUserSelected;
 
-        public bool CanPlay
-        {
-            get
-            {
-                return SelectedUser != null;
-            }
-        }
+        public bool CanPlay => IsUserSelected;
 
         public bool CanCreateUser
         {
@@ -174,7 +160,8 @@ namespace MemoryMatch.ViewModels
 
         public SignInViewModel()
         {
-            _userManager = new UserManager();
+            _userService = new UserService();
+            Users = new ObservableCollection<User>(_userService.LoadUsers());
             
             SelectImageCommand = new RelayCommand(ExecuteSelectImage);
             _createUserCommand = new RelayCommand(ExecuteCreateUser, CanExecuteCreateUser);
@@ -188,8 +175,8 @@ namespace MemoryMatch.ViewModels
 
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
-                Title = "Selectează o imagine",
-                Filter = "Fișiere imagine|*.jpg;*.jpeg;*.png;*.gif|Toate fișierele|*.*",
+                Title = "Selecteaza o imagine",
+                Filter = "Fisiere imagine|*.jpg;*.jpeg;*.png;*.gif|Toate fisierele|*.*",
                 InitialDirectory = imageDirectory
             };
 
@@ -199,13 +186,13 @@ namespace MemoryMatch.ViewModels
             }
         }
 
-
         private void ExecuteCreateUser(object parameter)
         {
             if (CanCreateUser)
             {
                 User newUser = new User(NewUsername, SelectedImagePath);
-                _userManager.AddUser(newUser);
+                _userService.AddUser(newUser);
+                Users.Add(newUser);
                 NewUsername = string.Empty;
                 SelectedImagePath = string.Empty;
                 PreviewImage = null;
@@ -221,7 +208,8 @@ namespace MemoryMatch.ViewModels
         {
             if (CanDeleteUser)
             {
-                _userManager.DeleteUser(SelectedUser);
+                _userService.DeleteUser(SelectedUser.Username);
+                Users.Remove(SelectedUser);
                 SelectedUser = null;
             }
         }

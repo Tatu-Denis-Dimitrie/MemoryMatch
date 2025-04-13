@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Diagnostics;
 
 namespace MemoryMatch.Services
 {
@@ -47,8 +48,9 @@ namespace MemoryMatch.Services
                 string json = File.ReadAllText(filePath);
                 return JsonSerializer.Deserialize<Game>(json);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Debug.WriteLine($"Eroare la incarcarea jocului: {ex.Message}");
                 return null;
             }
         }
@@ -147,45 +149,32 @@ namespace MemoryMatch.Services
         {
             string basePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "GameCategories", category);
             
-            if (Directory.Exists(basePath))
+            List<string> imageFiles = new List<string>();
+            
+            string[] jpgFiles = Directory.GetFiles(basePath, "*.jpg");
+            foreach (string file in jpgFiles)
             {
-                List<string> imageFiles = new List<string>();
-                
-                string[] jpgFiles = Directory.GetFiles(basePath, "*.jpg");
-                foreach (string file in jpgFiles)
-                {
-                    imageFiles.Add(file);
-                }
-                
-                string[] pngFiles = Directory.GetFiles(basePath, "*.png");
-                foreach (string file in pngFiles)
-                {
-                    imageFiles.Add(file);
-                }
-                
-                string[] gifFiles = Directory.GetFiles(basePath, "*.gif");
-                foreach (string file in gifFiles)
-                {
-                    imageFiles.Add(file);
-                }
-
-                if (imageFiles.Count >= count)
-                {
-                    string[] result = new string[count];
-                    for (int i = 0; i < count; i++)
-                    {
-                        result[i] = imageFiles[i];
-                    }
-                    return result;
-                }
+                imageFiles.Add(file);
+            }
+            
+            string[] pngFiles = Directory.GetFiles(basePath, "*.png");
+            foreach (string file in pngFiles)
+            {
+                imageFiles.Add(file);
+            }
+            
+            string[] gifFiles = Directory.GetFiles(basePath, "*.gif");
+            foreach (string file in gifFiles)
+            {
+                imageFiles.Add(file);
             }
 
-            string[] defaultPaths = new string[count];
+            string[] result = new string[count];
             for (int i = 0; i < count; i++)
             {
-                defaultPaths[i] = $"Resources/GameCategories/{category}/image{i + 1}.jpg";
+                result[i] = imageFiles[i];
             }
-            return defaultPaths;
+            return result;
         }
 
         public void SaveStatistic(string username, GameStatistic statistic)
@@ -211,8 +200,10 @@ namespace MemoryMatch.Services
                     userService.SaveUsers(users);
                 }
             }
-            catch (Exception)
-            {}
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Eroare la salvarea statisticilor: {ex.Message}");
+            }
         }
     }
 } 

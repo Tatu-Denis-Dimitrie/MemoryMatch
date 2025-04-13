@@ -95,7 +95,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             
-            <!-- Zona Utilizatori Existenți -->
+            <!-- Zona Utilizatori Existenti -->
             <Border Grid.Column="0" Style="{StaticResource BorderStyle}">
                 <Grid>
                     <Grid.RowDefinitions>

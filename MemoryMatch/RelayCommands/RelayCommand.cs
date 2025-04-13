@@ -21,14 +21,7 @@ namespace MemoryMatch.Helpers
 
         public bool CanExecute(object parameter)
         {
-            if (_canExecute == null)
-            {
-                return true;
-            }
-            else
-            {
-                return _canExecute(parameter);
-            }
+            return _canExecute == null || _canExecute(parameter);
         }
 
         public void Execute(object parameter)
